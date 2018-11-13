@@ -24,7 +24,7 @@ import org.pitest.mutationtest.engine.gregor.MutatorTestBase;
 public class RemoveSynchronizedMutatorTest extends MutatorTestBase {
 
   @Before
-  public void setupEngineToMutateOnlyConditionals() {
+  public void setupEngineToMutateOnlySynchronized() {
     createTesteeWith(RemoveSynchronizedMutator.REMOVE_SYNCHRONIZED_MUTATOR);
   }
 
@@ -38,6 +38,7 @@ public class RemoveSynchronizedMutatorTest extends MutatorTestBase {
 
 	public void HasSynchronizedBlock() {
 	    synchronized(lock) {
+		System.out.println(500/100);
 	    }
 	}
 	
@@ -50,6 +51,6 @@ public class RemoveSynchronizedMutatorTest extends MutatorTestBase {
     @Test
     public void shouldRemoveSynchronized() throws Exception {
 	final Mutant mutant = getFirstMutant(HasSynchronized.class);
-	assertMutantCallableReturns(new HasSynchronized("my-lock"), mutant, "my-lock");
+	assertMutantCallableReturns(new HasSynchronized("my-lock"), mutant, "Synchronized on my-lock.");
     }
 }
