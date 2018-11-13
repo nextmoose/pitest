@@ -31,7 +31,7 @@ public enum RemoveSynchronizedMutator implements MethodMutatorFactory {
   @Override
   public MethodVisitor create(final MutationContext context,
       final MethodInfo methodInfo, final MethodVisitor methodVisitor) {
-    return new ConditionalMethodVisitor(this, context, methodVisitor);
+    return new SynchronizedBlockVisitor(this, context, methodVisitor);
   }
 
   @Override
@@ -52,8 +52,10 @@ class SynchronizedBlockVisitor extends AbstractJumpMutator {
   private static final Map<Integer, Substitution> MUTATIONS   = new HashMap<>();
 
   static {
-    MUTATIONS.put(Opcodes.MONITORENTER, new Substitution(Opcodes.NOP, DESCRIPTION));
-    MUTATIONS.put(Opcodes.MONITOREXIT, new Substitution(Opcodes.NOP, DESCRIPTION));
+    MUTATIONS.put(Opcodes.IDIV, new Substitution(Opcodes.IDIV, DESCRIPTION));
+    MUTATIONS.put(Opcodes.IDIV, new Substitution(Opcodes.NOP, DESCRIPTION));
+    MUTATIONS.put(Opcodes.NOP, new Substitution(Opcodes.MONITORENTER, DESCRIPTION));
+    MUTATIONS.put(Opcodes.NOP, new Substitution(Opcodes.MONITOREXIT, DESCRIPTION));
   }
 
   SynchronizedBlockVisitor(final MethodMutatorFactory factory,
@@ -63,7 +65,10 @@ class SynchronizedBlockVisitor extends AbstractJumpMutator {
 
   @Override
   protected Map<Integer, Substitution> getMutations() {
-    return MUTATIONS;
+       if (true) {
+          throw new RuntimeException("FUCK THIS");
+      }
+   return MUTATIONS;
   }
 
 }
